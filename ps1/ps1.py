@@ -77,7 +77,7 @@ def BC(n, b, k):
     return digits
 
 def RadixSort(u, b, a):
-    k = math.log10(u)/math.log10(b)
+    k = math.ceil(math.log(u)/math.log(b))
     i = 0
     n = len(a)
 
@@ -91,7 +91,6 @@ def RadixSort(u, b, a):
     while j < k:
         for l in a:
             k_prime = (l[2])[j]
-            ## swap k with k_prime
             l[0] = k_prime
         a = countSort(b, a)
         j+=1
@@ -102,7 +101,7 @@ def RadixSort(u, b, a):
         k_k = 0
 
         while k_count < k:
-            k_k = k_k + (ll[2]*(b**b_count))
+            k_k = k_k + ((ll[2])[k_count]*(b**b_count))
             b_count+=1
             k_count+=1
         
@@ -110,3 +109,5 @@ def RadixSort(u, b, a):
         ll[0] = k_k
         
     return a
+
+print(RadixSort(78, 10, [[1,2],[5,30],[77,21],[23,4]]))
