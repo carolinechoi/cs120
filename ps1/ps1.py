@@ -62,7 +62,7 @@ def countSort(univsize, arr):
     for lst in universe:
         for elt in lst:
             sortedArr.append(elt)
-
+    
     return sortedArr
 
 def BC(n, b, k):
@@ -76,7 +76,7 @@ def BC(n, b, k):
         raise ValueError()
     return digits
 
-def RadixSort(u, b, a):
+def radixSort(u, b, a):
     k = math.ceil(math.log(u)/math.log(b))
     i = 0
     n = len(a)
@@ -110,4 +110,45 @@ def RadixSort(u, b, a):
         
     return a
 
-print(RadixSort(78, 10, [[1,2],[5,30],[77,21],[23,4]]))
+# In order to run your experiments, you may find the functions random.randint() and time.time() useful.
+def RA(n, U):
+    random_array = []
+    random_c = 0
+
+    while random_c < n:
+        random_array.append([random.randint(0, U-1), random.randint(0, U-1)])
+        random_c+=1
+    
+    return random_array
+
+def experiment():
+    n = random.randint(-1, 2**16)
+    U = random.randint(-1, 2**20)
+
+    a = RA(n, U)
+
+    print("n is: " + str(n))
+    print("U is: " + str(U))
+
+    for i in range(10):
+        ## CountSort
+        startC = time.time()
+        countSort(U, a)
+        endC = time.time()
+        print(str(i) + " Count Sort time is:" + str(endC - startC))
+
+        ## MergeSort
+        startM = time.time()
+        mergeSort(a)
+        endM = time.time()
+        print(str(i) + " Merge Sort time is:" + str(endM - startM))
+
+        ## RadixSort
+        startR = time.time()
+        radixSort(U, 2, a)
+        endR = time.time()
+        print(str(i) + " Count Sort time is:" + str(endR - startR))
+
+
+experiment()
+ 
