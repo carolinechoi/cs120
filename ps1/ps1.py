@@ -2,6 +2,7 @@ from asyncio import base_tasks
 import math
 import time
 import random
+import matplotlib.pyplot as plt
 
 """
 See below for mergeSort and countSort functions, and for a useful helper function.
@@ -121,34 +122,71 @@ def RA(n, U):
     
     return random_array
 
-def experiment():
-    n = random.randint(-1, 2**16)
-    U = random.randint(-1, 2**20)
-
+def experiment(n, U):
+    # n = random.randint(-1, 2**16)
+    # U = random.randint(-1, 2**20)
     a = RA(n, U)
 
-    print("n is: " + str(n))
-    print("U is: " + str(U))
+    c_times = []
+    m_times = []
+    r_times = []
 
-    for i in range(10):
+    avg = 0
+
+    avg_times = []
+
+    for i in range(3):
         ## CountSort
         startC = time.time()
         countSort(U, a)
         endC = time.time()
-        print(str(i) + " Count Sort time is:" + str(endC - startC))
+        c_times.append(endC - startC)
 
         ## MergeSort
         startM = time.time()
         mergeSort(a)
         endM = time.time()
-        print(str(i) + " Merge Sort time is:" + str(endM - startM))
+        m_times.append(endM - startM)
 
         ## RadixSort
         startR = time.time()
         radixSort(U, n, a)
         endR = time.time()
-        print(str(i) + " Count Sort time is:" + str(endR - startR))
+        r_times.append(endR - startR)
+    
+    for t in c_times:
+        avg = avg + t
+    avg_times.append(avg / 3)
+
+    avg = 0
+
+    for t in m_times:
+        avg = avg + t
+    avg_times.append(avg / 3)
+
+    avg = 0
+
+    for t in r_times:
+        avg = avg + t
+    avg_times.append(avg / 3)
+
+    min_index = avg_times.index(min(avg_times)) 
+    
+    index_map = {
+        0: "red", ## count
+        1: "blue", ## merge
+        2: "green" ## radix
+    }
+
+    return index_map[min_index]
 
 
-experiment()
+for U in range(1, 21):
+    for n in range(1, 17):
+        sort = experiment(pow(2,n), pow(2,U))
+        plt.scatter(pow(2,n), pow(2,U), color = sort)
+
+plt.xscale('log')
+plt.yscale('log')
+plt.show()
  
