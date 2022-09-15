@@ -145,7 +145,7 @@ def experiment():
 
         ## RadixSort
         startR = time.time()
-        radixSort(U, 2, a)
+        radixSort(U, n, a)
         endR = time.time()
         print(str(i) + " Count Sort time is:" + str(endR - startR))
 
