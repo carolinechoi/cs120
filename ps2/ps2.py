@@ -127,30 +127,35 @@ class BinarySearchTree:
        11 
     '''
     def rotate(self, direction, child_side):
-        if direction == "L" and child_side == "R": ## left rotation
-            B = self.right 
-            C = B.right 
-            self.right = C 
-            B.right = None
-            C.left = B
-        elif direction == "R" and child_side == "L": ## right rotation
-            B = self.left 
-            A = B.left 
-            self.left = A
-            B.left = None
-            A.right = B
-        elif direction == "R" and child_side == "R": ## right-left rotation
-            ## (1) perform right rotation on C
-            ## (2) perform left rotation on B 
-            C = self.right
-            new_tree = C.rotate(direction, "L")
-            return new_tree.rotate("L", "R")
-        elif direction == "L" and child_side == "L": ## left-right rotation
-            ## (1) perform left rotation on A
-            ## (2) perform right rotation on B
-            A = self.left 
-            new_tree = A.rotate(direction, "R")
-            return new_tree.rotate("R", "L")
+
+        if child_side == "R":
+            x = self.right 
+        else: 
+            x = self.left 
+        
+        if direction == "R":
+            y = x.left 
+        else: 
+            y = x.right
+
+        setattr(self, "right" if child_side == "R" else "left", y)
+
+        if x is None or y is None:
+            return self 
+        
+        if direction == "L":
+            x.right = y.left
+            y.left = x
+        else:
+            x.left = y.right 
+            y.right = x
+        
+        def sizeMe(n):
+            return n.size if n is not None else 0
+        
+        x.size = sizeMe(x.left) + sizeMe(x.right) + 1
+        y.size = sizeMe(y.left) + sizeMe(y.right) + 1
+
         return self
 
     def print_bst(self):
