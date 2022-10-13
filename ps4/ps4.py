@@ -77,9 +77,12 @@ NOTE: This is different from the QuickSelect definition. This function takes in 
 
 def MergeSortSelect(arr, query_list):
     # Only call MergeSort once
-    # ... MergeSort has already been implemented for you (see below)
-    pass
-    return [(0, -1)] * len(query_list)  # replace this line with your return
+    new_sort = MergeSort(arr)
+    final_queried = []
+    for q in query_list:
+        final_queried.append(new_sort[q])
+    return final_queried 
+
 
 
 ##################################
@@ -91,7 +94,7 @@ def MergeSortSelect(arr, query_list):
 
 def experiments():
     # Edit this parameter
-    k = [1, 1, 1, 1, 1]
+    k = [20, 30, 40, 45, 50]
 
     # Feel free to edit these initial parameters
 
