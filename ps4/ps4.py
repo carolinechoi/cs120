@@ -35,9 +35,33 @@ def QuickSelect(arr, i):
 
     # Feel free to use get_random_index(arr) or get_random_int(start_inclusive, end_inclusive)
     # ... see the helper functions below
-    pass
-    return (0, -1)
 
+    if len(arr) == 1: 
+        return arr[0]
+    elif len(arr) == 0:
+        return arr         
+    else:
+        p = get_random_int(0, len(arr)-1)
+        q, _ = arr[p] ## access arr[p]'s key 
+        A_less = []
+        A_greater = []
+        A_equal = []
+        for pair in arr:
+            k, _ = pair 
+            if k < q: 
+                A_less.append(pair)
+            elif k > q:
+                A_greater.append(pair)
+            else:
+                A_equal.append(pair)
+        n_less = len(A_less)
+        n_equal = len(A_equal)
+        if i < n_less:
+            return QuickSelect(A_less, i)
+        elif i >= (n_less + n_equal):
+            return QuickSelect(A_greater, i - n_less - n_equal)
+        else:
+            return A_equal[0]
 
 '''
 Uses MergeSort to resolve a number of queries where each query is to find an key-value pair (Kj, Vj) such that Kj is an i’th smallest key.
