@@ -31,18 +31,41 @@ returns: An key-value pair (Kj, Vj) such that Kj is an i’th smallest key.
 
 
 def QuickSelect(arr, i):
-    # Your code here
-
-    # Feel free to use get_random_index(arr) or get_random_int(start_inclusive, end_inclusive)
-    # ... see the helper functions below
-
     if len(arr) == 1: 
         return arr[0]
     elif len(arr) == 0:
         return arr         
     else:
         p = get_random_int(0, len(arr)-1)
-        q, _ = arr[p] ## access arr[p]'s key 
+        q, _ = arr[p] 
+        A_less = []
+        A_greater = []
+        A_equal = []
+        for pair in arr:
+            k, _ = pair 
+            if k < q: 
+                A_less.append(pair)
+            elif k > q:
+                A_greater.append(pair)
+            else:
+                A_equal.append(pair)
+        n_less = len(A_less)
+        n_equal = len(A_equal)
+        if i < n_less:
+            return QuickSelect(A_less, i)
+        elif i >= (n_less + n_equal):
+            return QuickSelect(A_greater, i - n_less - n_equal)
+        else:
+            return A_equal[0]
+
+def MedOfThree_QS(arr, i):
+    if len(arr) == 1: 
+        return arr[0]
+    elif len(arr) == 0:
+        return arr         
+    else:
+        p = get_random_int(0, len(arr)-4) + 1
+        q, _ = arr[p] 
         A_less = []
         A_greater = []
         A_equal = []
@@ -152,6 +175,21 @@ def experiments():
                 k_record.append(ki)
                 ms_record.append(seconds * 1000)  # Convert seconds to milliseconds
                 algorithm_record.append("MergeSort")
+            
+            # Median of Three QuickSelect Runs
+            for _ in range(RUNS):
+                # Record Time Taken to Solve All Queries
+                start_time = time.time()
+                for q in queries:
+                    # Copy dataset just to be safe
+                    MedOfThree_QS(dataset_size_n.copy(), q)
+                seconds = time.time() - start_time
+                # Record this trial run
+                n_record.append(ni)
+                k_record.append(ki)
+                ms_record.append(seconds * 1000)  # Convert seconds to milliseconds
+                algorithm_record.append("Median of Three QuickSelect")
+
 
             # Print progress
             iter += 1
