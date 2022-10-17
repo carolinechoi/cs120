@@ -80,9 +80,9 @@ def MedOfThree_QS(arr, i):
         n_less = len(A_less)
         n_equal = len(A_equal)
         if i < n_less:
-            return QuickSelect(A_less, i)
+            return MedOfThree_QS(A_less, i)
         elif i >= (n_less + n_equal):
-            return QuickSelect(A_greater, i - n_less - n_equal)
+            return MedOfThree_QS(A_greater, i - n_less - n_equal)
         else:
             return A_equal[0]
 
@@ -117,7 +117,7 @@ def MergeSortSelect(arr, query_list):
 
 def experiments():
     # Edit this parameter
-    k = [30, 40, 45, 50, 55]
+    k = [65, 75, 85, 95, 105]
 
     # Feel free to edit these initial parameters
 
