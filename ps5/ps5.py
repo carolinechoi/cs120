@@ -127,11 +127,36 @@ def bfs_2_coloring(G, precolored_nodes=None):
         if len(precolored_nodes) == G.N:
             return G.colors
     
-    # TODO: Complete this function by implementing two-coloring using the colors 0 and 1.
-    # If there is no valid coloring, reset all the colors to None using G.reset_colors()
+    ## Breadth-First Search in connected components
+    def BFS(g, index):
+        S = [index]
+        vis = set() 
+        g.colors[index] = 0
+
+        while len(S) > 0:
+            vert = S[0] #get current vertex from list
+            S.pop(0) #remove current vertex from the list 
+            vis.add(vert) #add visited vertex to set
     
-    G.reset_colors()
-    return None
+            for u in g.edges[vert]: #iterate through edges of the vertex, aka which vertices it has edges to
+                if u not in vis:
+                    if precolored_nodes is not None:
+                        if u not in precolored_nodes:
+                            g.colors[u] = 0 if g.colors[vert] == 1 else 1 #switch the color
+                    else: 
+                        g.colors[u] = 0 if g.colors[vert] == 1 else 1 #switch the color 
+                    S.append(u) # add edge vertex to queue
+        return vis 
+    
+    for i in range(G.N): #cycle through number of nodes
+        if i not in visited:
+            visited.update(BFS(G, i)) #update visited with the connected subgraph once done 
+    
+    if G.is_graph_coloring_valid() is False:
+        G.reset_colors()
+        return None
+    
+    return G.colors
 
 '''
     Part B: Implement is_independent_set.
@@ -140,9 +165,11 @@ def bfs_2_coloring(G, precolored_nodes=None):
 # Given an instance of the Graph class G and a subset of precolored nodes,
 # Checks if subset is an independent set in G 
 def is_independent_set(G, subset):
-    # TODO: Complete this function
-
-    return True
+    for node in subset: 
+        for edge in G.edges[node]:
+            if edge in subset: 
+                return False 
+    return True             
 
 '''
     Part C: Implement the 3-coloring algorithm from the sender receiver exercise.
@@ -168,8 +195,16 @@ def is_independent_set(G, subset):
 # If successful, modifies G.colors and returns the coloring.
 # If no coloring is possible, resets all of G's colors to None and returns None.
 def iset_bfs_3_coloring(G):
-    # TODO: Complete this function.
 
+    for i in range((G.N // 3) + 1):
+        possible_combs = combinations(range(G.N), i)
+
+        for comb in possible_combs:
+            if is_independent_set(G, list(comb)):
+                f_s = bfs_2_coloring(G, list(comb))
+                if f_s is not None:
+                    return f_s 
+    
     G.reset_colors()
     return None
 
