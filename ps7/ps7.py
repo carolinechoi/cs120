@@ -190,7 +190,15 @@ def iset_bfs_3_coloring(G):
 def sat_3_coloring(G):
     solver = Glucose3()
 
-    # TODO: Add the clauses to the solver
+    # for each vertex, find edges and add those as "OR" terms 
+    for i in range(G.N):
+        c = i * 3
+        solver.add_clause([c + 1, c + 2, c + 3]) # each vertex must be assigned a color
+        for v in G.edges[i]:
+            v2 = v * 3
+            solver.add_clause([-(c + 1), -(v2 + 1)]) # the endpoints of an edge cannot be assigned the same color
+            solver.add_clause([-(c + 2), -(v2 + 2)])
+            solver.add_clause([-(c + 3), -(v2 + 3)])
 
     # Attempt to solve, return None if no solution possible
     if not solver.solve():
@@ -199,12 +207,11 @@ def sat_3_coloring(G):
 
     # Accesses the model in form [-v1, v2, -v3 ...], which denotes v1 = False, v2 = True, v3 = False, etc.
     solution = solver.get_model()
-
-    # TODO: If a solution is found, convert it into a coloring and update G.colors
-
+    for v in range(len(solution)):
+        if solution[v] > 0:
+            G.colors[int((solution[v]-1)/3)] = v % 3 
+    
     return G.colors
-
-
 
 # Feel free to add miscellaneous tests below!
 if __name__ == "__main__":
